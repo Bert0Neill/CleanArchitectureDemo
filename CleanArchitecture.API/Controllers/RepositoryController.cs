@@ -8,7 +8,7 @@ namespace CleanArchitecture.API.Controllers
     [ApiController]
     public class RepositoryController : ControllerBase
     {
-        private readonly IAlbumService _service;
+        private readonly IAlbumService? _service;
 
         public RepositoryController(IAlbumService service)
         {
@@ -20,7 +20,7 @@ namespace CleanArchitecture.API.Controllers
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<RepositoryController> _logger;
+        private readonly ILogger<RepositoryController>? _logger;
 
         public RepositoryController(ILogger<RepositoryController> logger)
         {
