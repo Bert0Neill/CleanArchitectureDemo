@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Services.Database
 {
-    public class ArtistService
+    public class ArtistService : IArtistService
     {
         private readonly IArtistRepository _artistRepository;
 

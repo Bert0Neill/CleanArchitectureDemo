@@ -1,7 +1,6 @@
-﻿using Azure;
+﻿using AutoMapper;
+using CleanArchitecture.API.DTOs;
 using CleanArchitecture.Application.Interfaces;
-using CleanArchitecture.Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.API.Controllers
@@ -13,28 +12,32 @@ namespace CleanArchitecture.API.Controllers
         private readonly IAlbumService _albumService;
         private readonly IArtistService _artistService;
         private readonly ILogger<RepositoryController> _logger;
+        private readonly IMapper _mapper;
 
-        public RepositoryController(IAlbumService albumService, IArtistService _artistService, ILogger<RepositoryController> logger)
+        public RepositoryController(IAlbumService albumService, IArtistService artistService, IMapper mapper, ILogger<RepositoryController> logger)
         {
             _albumService = albumService;
             _logger = logger;
-            _artistService = _artistService;
+            _artistService = artistService;
+            _mapper = mapper;
         }
 
-        #region Get API Methods
-       
-
+        #region Get API Methods       
         [HttpGet]
-        [Route("RetrieveLatestAlbums")]
-        public async Task<ActionResult<IEnumerable<Albums>>> RetrieveLatestAlbumsAsync()
+        [Route("RetrieveLatestAlbumsAsync")]
+        public async Task<ActionResult<IEnumerable<AlbumDTO>>> RetrieveLatestAlbumsAsync()
         {
             var results = await _albumService.RetrieveTopTenAlbumsAsync();
-            return Ok(results); 
+
+            var AlbumDto = _mapper.Map<IEnumerable<AlbumDTO>>(results);
+            
+
+            return Ok(AlbumDto); 
         }
 
         [HttpGet]
-        [Route("RetrieveMostActiveArtists")]
-        public async Task<ActionResult<IEnumerable<Artists>>> RetrieveMostActiveArtistsAsync()
+        [Route("RetrieveMostActiveArtistsAsync")]
+        public async Task<ActionResult<IEnumerable<ArtistDTO>>> RetrieveMostActiveArtistsAsync()
         {
             var results = await _artistService.RetrieveMostActiveArtistAsync();
             return Ok(results);
@@ -43,19 +46,32 @@ namespace CleanArchitecture.API.Controllers
 
         #region Post  API Methods
         [HttpPost]
-        [Route("InsertAlbum")]
-        public async Task<ActionResult<Albums>> InsertAlbumAsync(Albums album)
+        [Route("InsertAlbumAsync")]
+        public async Task<ActionResult<AlbumDTO>> InsertAlbumAsync([FromBody] AlbumDTO album)
         {
-            var results = await _albumService.InsertAlbumAsync(album);
-            return Ok(results);
+            //var results = await _albumService.InsertAlbumAsync(album);
+            //return Ok(results);
+            return Ok(Enumerable.Empty<AlbumDTO>());
         }
 
         [HttpPost]
-        [Route("InsertArtist")]
-        public async Task<ActionResult<Artists>> InsertArtistAsync(Artists artist)
+        [Route("InsertArtistAsync")]
+        public async Task<ActionResult<ArtistDTO>> InsertArtistAsync([FromBody] ArtistDTO artist)
         {
-            var results = await _artistService.InsertArtistAsync(artist);
-            return Ok(results);
+            //var results = await _artistService.InsertArtistAsync(artist);
+            //return Ok(results);
+            return Ok(Enumerable.Empty<ArtistDTO>());
+        }
+        #endregion
+
+        #region Put  API Methods
+        [HttpPut]
+        [Route("UpdateAlbumAsync")]
+        public async Task<ActionResult<AlbumDTO>> UpdateAlbumAsync([FromBody] AlbumDTO album)
+        {
+            //var results = await _albumService.InsertAlbumAsync(album);
+            //return Ok(results);
+            return Ok(Enumerable.Empty<AlbumDTO>());
         }
         #endregion
     }
