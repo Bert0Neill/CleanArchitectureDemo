@@ -21,5 +21,22 @@ namespace CleanArchitecture.Application.Services
         {
             return await _albumRepository.RetrieveTopTenAlbumsAsync();
         }
+
+        public async Task<IEnumerable<Artists>> RetrieveMostActiveArtistAsync()
+        {
+            return await _albumRepository.RetrieveMostActiveArtistAsync();
+        }
+
+        public async Task<Albums> InsertAlbumAsync(Albums album)
+        {
+            return await _albumRepository.InsertAlbumAsync(album);
+        }
+
+        public async Task<Artists> InsertArtistAsync(Artists artist)
+        {
+            return await _albumRepository.InsertArtistAsync(artist);
+        }
+
+
     }
 }

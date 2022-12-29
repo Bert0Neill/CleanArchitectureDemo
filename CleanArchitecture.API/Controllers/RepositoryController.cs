@@ -24,49 +24,37 @@ namespace CleanArchitecture.API.Controllers
 
         [HttpGet]
         [Route("RetrieveLatestAlbums")]
-        public async Task<ActionResult<IEnumerable<Albums>>> RetrieveLatestAlbums()
+        public async Task<ActionResult<IEnumerable<Albums>>> RetrieveLatestAlbumsAsync()
         {
-            var results = _service.RetrieveTopTenAlbumsAsync();
-
-            return Ok(await results); 
-
-            //return await _service.RetrieveTopTenAlbumsAsync().ToList();            
+            var results = await _service.RetrieveTopTenAlbumsAsync();
+            return Ok(results); 
         }
 
         [HttpGet]
         [Route("RetrieveMostActiveArtists")]
-        public async Task<IEnumerable<Albums>> RetrieveMostActiveArtists()
+        public async Task<ActionResult<IEnumerable<Artists>>> RetrieveMostActiveArtistsAsync()
         {
-            return await _service.RetrieveTopTenAlbumsAsync();
+            var results = await _service.RetrieveMostActiveArtistAsync();
+            return Ok(results);
         }
         #endregion
 
         #region Post  API Methods
-        //[HttpPost]
-        //[Route("InsertAlbum")]
-        //public WeatherForecast InsertAlbum()
-        //{
-        //    //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    //{
-        //    //    Date = DateTime.Now.AddDays(index),
-        //    //    TemperatureC = Random.Shared.Next(-20, 55),
-        //    //    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        //    //})
-        //    //.ToArray();
-        //}
+        [HttpPost]
+        [Route("InsertAlbum")]
+        public async Task<ActionResult<Albums>> InsertAlbumAsync(Albums album)
+        {
+            var results = await _service.InsertAlbumAsync(album);
+            return Ok(results);
+        }
 
-        //[HttpPost]
-        //[Route("InsertArtist")]
-        //public WeatherForecast InsertArtist()
-        //{
-        //    //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    //{
-        //    //    Date = DateTime.Now.AddDays(index),
-        //    //    TemperatureC = Random.Shared.Next(-20, 55),
-        //    //    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        //    //})
-        //    //.ToArray();
-        //}
+        [HttpPost]
+        [Route("InsertArtist")]
+        public async Task<ActionResult<Artists>> InsertArtistAsync(Artists artist)
+        {
+            var results = await _service.InsertArtistAsync(artist);
+            return Ok(results);
+        }
         #endregion
     }
 }
