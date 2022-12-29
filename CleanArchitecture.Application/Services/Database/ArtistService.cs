@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitecture.Application.Services
+namespace CleanArchitecture.Application.Services.Database
 {
     public class ArtistService
     {

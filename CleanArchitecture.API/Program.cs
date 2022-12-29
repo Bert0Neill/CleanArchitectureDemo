@@ -1,5 +1,5 @@
 using CleanArchitecture.Application.Interfaces;
-using CleanArchitecture.Application.Services;
+using CleanArchitecture.Application.Services.Database;
 using CleanArchitecture.Infrastructure.Database;
 using Microsoft.AspNetCore.Builder;
 
