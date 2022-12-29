@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Infrastructure.Database
 {
@@ -12,9 +13,9 @@ namespace CleanArchitecture.Infrastructure.Database
             _musicDbContext = musicDbContext;
         }
 
-        public IEnumerable<Albums> RetrieveTopTenAlbums()
+        public async Task<IEnumerable<Albums>> RetrieveTopTenAlbumsAsync()
         {
-            return _musicDbContext.Albums.Take(10).ToList();
+            return await _musicDbContext.Albums.Take(10).ToListAsync();
         }
     }
 }

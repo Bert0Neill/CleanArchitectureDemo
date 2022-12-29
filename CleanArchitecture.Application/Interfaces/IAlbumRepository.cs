@@ -4,6 +4,6 @@ namespace CleanArchitecture.Application.Interfaces
 {
     public interface IAlbumRepository
     {
-        IEnumerable<Albums> RetrieveTopTenAlbums();
+        Task<IEnumerable<Albums>> RetrieveTopTenAlbumsAsync();
     }
 }

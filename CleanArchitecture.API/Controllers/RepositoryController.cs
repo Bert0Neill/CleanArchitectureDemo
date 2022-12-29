@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Application.Interfaces;
+﻿using Azure;
+using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,16 +24,20 @@ namespace CleanArchitecture.API.Controllers
 
         [HttpGet]
         [Route("RetrieveLatestAlbums")]
-        public IEnumerable<Albums> RetrieveLatestAlbums()
+        public async Task<ActionResult<IEnumerable<Albums>>> RetrieveLatestAlbums()
         {
-            return _service.RetrieveTopTenAlbums().ToList();            
+            var results = _service.RetrieveTopTenAlbumsAsync();
+
+            return Ok(await results); 
+
+            //return await _service.RetrieveTopTenAlbumsAsync().ToList();            
         }
 
         [HttpGet]
         [Route("RetrieveMostActiveArtists")]
-        public IEnumerable<Albums> RetrieveMostActiveArtists()
+        public async Task<IEnumerable<Albums>> RetrieveMostActiveArtists()
         {
-            return _service.RetrieveTopTenAlbums().ToList();
+            return await _service.RetrieveTopTenAlbumsAsync();
         }
         #endregion
 
