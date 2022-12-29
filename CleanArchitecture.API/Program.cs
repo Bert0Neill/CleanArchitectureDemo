@@ -1,4 +1,5 @@
 using AutoMapper;
+using CleanArchitecture.API.Middleware;
 using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Application.Services.Database;
 using CleanArchitecture.Domain.Entities;
@@ -10,28 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Register Configuration
 ConfigurationManager configuration = builder.Configuration;
 
-/************************************************
- * AutoMapper Configuration
- ************************************************/
-//var mapperConfiguration = new MapperConfiguration(cfg =>
-//{
-//    cfg.CreateMap<Albums, AlbumDTO>();
-//    cfg.CreateMap<AlbumDTO, Albums>();
-//    cfg.CreateMap<Artists, ArtistDTO>();
-//    cfg.CreateMap<ArtistDTO, Artists>();
-//});
-// only during development, validate your mappings; remove it before release
-//#if DEBUG
-//mapperConfiguration.AssertConfigurationIsValid();
-//#endif
-
-// use DI (http://docs.automapper.org/en/latest/Dependency-injection.html) or create the mapper yourself
-//var mapper = mapperConfiguration.CreateMapper();
-
 builder.Services.AddControllers();
 
 /************************************************
- * Swagger 
+ * Add Swagger UI to services container
  ************************************************/
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -42,18 +25,24 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSqlServer<MusicContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 /************************************************
- * Dependency Injection Container
+ * Dependency Injection 
  ************************************************/
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddScoped<IArtistService, ArtistService>();
-
 builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
 builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 
-//builder.Services.AddScoped<IMapper, Mapper>();
+/************************************************
+ Add AutoMaper DI to services container
+ ************************************************/
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
+
+/*************************************************
+ * Associate a Global Error handler middleware with all your unhandled exceptions
+ *************************************************/
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

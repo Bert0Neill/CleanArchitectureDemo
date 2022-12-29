@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using Ardalis.GuardClauses;
+using AutoMapper;
 using CleanArchitecture.API.DTOs;
 using CleanArchitecture.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace CleanArchitecture.API.Controllers
 {
@@ -16,10 +18,11 @@ namespace CleanArchitecture.API.Controllers
 
         public RepositoryController(IAlbumService albumService, IArtistService artistService, IMapper mapper, ILogger<RepositoryController> logger)
         {
-            _albumService = albumService;
-            _logger = logger;
-            _artistService = artistService;
-            _mapper = mapper;
+            //guard clauses
+            _albumService = Guard.Against.Null(albumService, nameof(albumService));
+            _mapper = Guard.Against.Null(mapper, nameof(mapper));
+            _logger = Guard.Against.Null(logger, nameof(logger));
+            _artistService = Guard.Against.Null(artistService, nameof(artistService));
         }
 
         #region Get API Methods       
@@ -28,10 +31,7 @@ namespace CleanArchitecture.API.Controllers
         public async Task<ActionResult<IEnumerable<AlbumDTO>>> RetrieveLatestAlbumsAsync()
         {
             var results = await _albumService.RetrieveTopTenAlbumsAsync();
-
             var AlbumDto = _mapper.Map<IEnumerable<AlbumDTO>>(results);
-            
-
             return Ok(AlbumDto); 
         }
 
