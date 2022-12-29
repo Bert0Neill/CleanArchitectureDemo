@@ -13,11 +13,17 @@ namespace CleanArchitecture.Infrastructure.Database
     {
         public MusicContext()
         {
+            // performance related - change as needed
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public MusicContext(DbContextOptions<MusicContext> options)
             : base(options)
         {
+            // performance related - change as needed
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public virtual DbSet<Albums> Albums { get; set; }

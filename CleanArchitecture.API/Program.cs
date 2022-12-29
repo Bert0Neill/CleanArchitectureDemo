@@ -5,57 +5,81 @@ using CleanArchitecture.Application.Services.Database;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Infrastructure.Database;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register Configuration
-ConfigurationManager configuration = builder.Configuration;
-
 builder.Services.AddControllers();
 
-/************************************************
- * Add Swagger UI to services container
- ************************************************/
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Logging.AddConsole();
+var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
-/************************************************
- * Add connection string to services container
- ************************************************/
-builder.Services.AddSqlServer<MusicContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
-
-/************************************************
- * Dependency Injection 
- ************************************************/
-builder.Services.AddScoped<IAlbumService, AlbumService>();
-builder.Services.AddScoped<IArtistService, ArtistService>();
-builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
-builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
-
-/************************************************
- Add AutoMaper DI to services container
- ************************************************/
-builder.Services.AddAutoMapper(typeof(Program));
-
-var app = builder.Build();
-
-/*************************************************
- * Associate a Global Error handler middleware with all your unhandled exceptions
- *************************************************/
-app.UseMiddleware<ErrorHandlerMiddleware>();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    logger.Info("init main");
+
+    builder.Logging.ClearProviders();
+    builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+    builder.Host.UseNLog();
+
+
+    /************************************************
+     * Add Swagger UI to services container
+     ************************************************/
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+
+    /************************************************
+     * Add connection string to services container - using EF pooling for performance
+     ************************************************/
+    builder.Services.AddDbContextPool<MusicContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    /************************************************
+     * Dependency Injection 
+     ************************************************/
+    builder.Services.AddScoped<IAlbumService, AlbumService>();
+    builder.Services.AddScoped<IArtistService, ArtistService>();
+    builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
+    builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+
+    /************************************************
+     Add AutoMaper DI to services container
+     ************************************************/
+    builder.Services.AddAutoMapper(typeof(Program));
+
+    var app = builder.Build();
+
+
+    /*************************************************
+     * Associate a Global Error handler middleware with all your unhandled exceptions
+     *************************************************/
+    app.UseMiddleware<ErrorHandlerMiddleware>();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch (Exception exception)
+{
+    // NLog: catch setup errors
+    logger.Error(exception, "Stopped program because of exception");
+    throw;
+}
+finally
+{
+    // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+    NLog.LogManager.Shutdown();
+}
 
