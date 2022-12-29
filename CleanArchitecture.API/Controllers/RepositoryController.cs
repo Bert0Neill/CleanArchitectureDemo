@@ -10,13 +10,15 @@ namespace CleanArchitecture.API.Controllers
     [ApiController]
     public class RepositoryController : ControllerBase
     {
-        private readonly IAlbumService _service;
+        private readonly IAlbumService _albumService;
+        private readonly IArtistService _artistService;
         private readonly ILogger<RepositoryController> _logger;
 
-        public RepositoryController(IAlbumService service, ILogger<RepositoryController> logger)
+        public RepositoryController(IAlbumService albumService, IArtistService _artistService, ILogger<RepositoryController> logger)
         {
-            _service = service;
+            _albumService = albumService;
             _logger = logger;
+            _artistService = _artistService;
         }
 
         #region Get API Methods
@@ -26,7 +28,7 @@ namespace CleanArchitecture.API.Controllers
         [Route("RetrieveLatestAlbums")]
         public async Task<ActionResult<IEnumerable<Albums>>> RetrieveLatestAlbumsAsync()
         {
-            var results = await _service.RetrieveTopTenAlbumsAsync();
+            var results = await _albumService.RetrieveTopTenAlbumsAsync();
             return Ok(results); 
         }
 
@@ -34,7 +36,7 @@ namespace CleanArchitecture.API.Controllers
         [Route("RetrieveMostActiveArtists")]
         public async Task<ActionResult<IEnumerable<Artists>>> RetrieveMostActiveArtistsAsync()
         {
-            var results = await _service.RetrieveMostActiveArtistAsync();
+            var results = await _artistService.RetrieveMostActiveArtistAsync();
             return Ok(results);
         }
         #endregion
@@ -44,7 +46,7 @@ namespace CleanArchitecture.API.Controllers
         [Route("InsertAlbum")]
         public async Task<ActionResult<Albums>> InsertAlbumAsync(Albums album)
         {
-            var results = await _service.InsertAlbumAsync(album);
+            var results = await _albumService.InsertAlbumAsync(album);
             return Ok(results);
         }
 
@@ -52,7 +54,7 @@ namespace CleanArchitecture.API.Controllers
         [Route("InsertArtist")]
         public async Task<ActionResult<Artists>> InsertArtistAsync(Artists artist)
         {
-            var results = await _service.InsertArtistAsync(artist);
+            var results = await _artistService.InsertArtistAsync(artist);
             return Ok(results);
         }
         #endregion

@@ -1,13 +1,11 @@
 ﻿using CleanArchitecture.Application.Interfaces;
 using CleanArchitecture.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CleanArchitecture.Application.Services
 {
+    /// <summary>
+    /// The Application service fnx's can make multiple calls to Infrastructure fnx's to complete the task\logic.
+    /// </summary>
     public class AlbumService : IAlbumService
     {
         private readonly IAlbumRepository _albumRepository;
@@ -18,25 +16,17 @@ namespace CleanArchitecture.Application.Services
         }
 
         public async Task<IEnumerable<Albums>> RetrieveTopTenAlbumsAsync()
-        {
+        {            
             return await _albumRepository.RetrieveTopTenAlbumsAsync();
-        }
-
-        public async Task<IEnumerable<Artists>> RetrieveMostActiveArtistAsync()
-        {
-            return await _albumRepository.RetrieveMostActiveArtistAsync();
+            
+            // perform (multiple) calls to Infrastructure layer from Application service, to complete the overall task for this service fnx
+            // for e.g. log some extra information regarding this task, send an email or make a call out to an external API to start a workflow
         }
 
         public async Task<Albums> InsertAlbumAsync(Albums album)
         {
             return await _albumRepository.InsertAlbumAsync(album);
         }
-
-        public async Task<Artists> InsertArtistAsync(Artists artist)
-        {
-            return await _albumRepository.InsertArtistAsync(artist);
-        }
-
 
     }
 }
