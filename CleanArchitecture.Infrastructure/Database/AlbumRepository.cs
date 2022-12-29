@@ -12,7 +12,7 @@ namespace CleanArchitecture.Infrastructure.Database
             _musicDbContext = musicDbContext;
         }
 
-        public IEnumerable<Albums> RetrieveTopTenAlbumns()
+        public IEnumerable<Albums> RetrieveTopTenAlbums()
         {
             return _musicDbContext.Albums.Take(10).ToList();
         }

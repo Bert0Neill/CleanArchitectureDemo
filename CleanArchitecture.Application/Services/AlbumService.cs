@@ -17,9 +17,9 @@ namespace CleanArchitecture.Application.Services
             _albumRepository = albumRepository;
         }
 
-        public IEnumerable<Albums> RetrieveTopTenAlbumns()
+        public IEnumerable<Albums> RetrieveTopTenAlbums()
         {
-            return _albumRepository.RetrieveTopTenAlbumns();
+            return _albumRepository.RetrieveTopTenAlbums();
         }
     }
 }

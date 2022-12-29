@@ -4,6 +4,6 @@ namespace CleanArchitecture.Application.Interfaces
 {
     public interface IAlbumService
     {
-        IEnumerable<Albums> RetrieveTopTenAlbumns();
+        IEnumerable<Albums> RetrieveTopTenAlbums();
     }
 }
