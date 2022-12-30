@@ -48,6 +48,17 @@ try
      ************************************************/
     builder.Services.AddAutoMapper(typeof(Program));
 
+    /*************************************************
+   * Enable CORS
+   *************************************************/
+    builder.Services.AddCors(policy =>
+    {
+        policy.AddPolicy("_myAllowSpecificOrigins", builder => builder.WithOrigins("https://localhost:7227")
+             .AllowAnyMethod()
+             .AllowAnyHeader()
+             .AllowCredentials());
+    });
+
     var app = builder.Build();
 
 
@@ -64,6 +75,8 @@ try
     }
 
     app.UseHttpsRedirection();
+
+    app.UseCors("_myAllowSpecificOrigins");
 
     app.UseAuthorization();
 
