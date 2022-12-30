@@ -2,11 +2,13 @@
 using AutoMapper;
 using CleanArchitecture.API.DTOs;
 using CleanArchitecture.Application.Interfaces;
+using CleanArchitecture.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Text.Json;
 
 namespace CleanArchitecture.API.Controllers
-{
+{    
     [Route("api/[controller]")]
     [ApiController]
     public class RepositoryController : ControllerBase
@@ -23,55 +25,67 @@ namespace CleanArchitecture.API.Controllers
             _mapper = Guard.Against.Null(mapper, nameof(mapper));
             _logger = Guard.Against.Null(logger, nameof(logger));
             _artistService = Guard.Against.Null(artistService, nameof(artistService));
+
+            _logger.LogInformation($"RepositoryController ctor");
         }
 
-        #region Get API Methods       
+        #region Get API Methods              
         [HttpGet]
         [Route("RetrieveLatestAlbumsAsync")]
         public async Task<ActionResult<IEnumerable<AlbumDTO>>> RetrieveLatestAlbumsAsync()
         {
-            var results = await _albumService.RetrieveTopTenAlbumsAsync();
+            _logger.LogInformation($"RetrieveLatestAlbumsAsync");
+
+            var results = await _albumService.RetrieveCommonAlbumsAsync();
             var AlbumDto = _mapper.Map<IEnumerable<AlbumDTO>>(results);
             return Ok(AlbumDto); 
         }
-
+        
         [HttpGet]
         [Route("RetrieveMostActiveArtistsAsync")]
         public async Task<ActionResult<IEnumerable<ArtistDTO>>> RetrieveMostActiveArtistsAsync()
         {
+            _logger.LogInformation($"RetrieveMostActiveArtistsAsync");
+
             var results = await _artistService.RetrieveMostActiveArtistAsync();
             return Ok(results);
         }
         #endregion
 
-        #region Post  API Methods
+        #region Post  API Methods        
         [HttpPost]
         [Route("InsertAlbumAsync")]
         public async Task<ActionResult<AlbumDTO>> InsertAlbumAsync([FromBody] AlbumDTO album)
         {
-            //var results = await _albumService.InsertAlbumAsync(album);
-            //return Ok(results);
-            return Ok(Enumerable.Empty<AlbumDTO>());
-        }
+            _logger.LogInformation($"InsertAlbumAsync - {JsonSerializer.Serialize(album)}");
 
+            var newAlbum = _mapper.Map<Albums>(album);
+            var results = await _albumService.InsertNewAlbumAsync(newAlbum);
+            return Ok(results);
+        }
+        
         [HttpPost]
         [Route("InsertArtistAsync")]
         public async Task<ActionResult<ArtistDTO>> InsertArtistAsync([FromBody] ArtistDTO artist)
         {
-            //var results = await _artistService.InsertArtistAsync(artist);
-            //return Ok(results);
-            return Ok(Enumerable.Empty<ArtistDTO>());
+            _logger.LogInformation($"InsertArtistAsync - {JsonSerializer.Serialize(artist)}");
+
+            var newArtist = _mapper.Map<Artists>(artist);
+            var results = await _artistService.InsertArtistAsync(newArtist);
+            return Ok(results);
         }
         #endregion
 
-        #region Put  API Methods
+        #region Put  API Methods        
         [HttpPut]
         [Route("UpdateAlbumAsync")]
         public async Task<ActionResult<AlbumDTO>> UpdateAlbumAsync([FromBody] AlbumDTO album)
         {
-            //var results = await _albumService.InsertAlbumAsync(album);
-            //return Ok(results);
-            return Ok(Enumerable.Empty<AlbumDTO>());
+            _logger.LogInformation($"UpdateAlbumAsync - {JsonSerializer.Serialize(album)}");
+
+            var newAlbum = _mapper.Map<Albums>(album);
+            var results = await _albumService.UpdateAlbumAsync(newAlbum);
+            return Ok(results);
         }
         #endregion
     }

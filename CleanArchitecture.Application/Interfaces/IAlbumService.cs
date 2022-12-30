@@ -4,7 +4,8 @@ namespace CleanArchitecture.Application.Interfaces
 {
     public interface IAlbumService
     {
-        Task <IEnumerable<Albums>> RetrieveTopTenAlbumsAsync();        
-        Task<Albums> InsertAlbumAsync(Albums album);        
+        Task <IEnumerable<Albums>> RetrieveCommonAlbumsAsync();        
+        Task<Albums> InsertNewAlbumAsync(Albums album);
+        Task<Albums> UpdateAlbumAsync(Albums newAlbum);        
     }
 }
