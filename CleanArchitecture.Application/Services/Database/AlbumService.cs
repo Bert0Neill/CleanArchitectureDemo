@@ -14,7 +14,6 @@ namespace CleanArchitecture.Application.Services.Database
         private readonly IAlbumRepository _albumRepository;
         private readonly ILogger<AlbumService> _logger;
 
-
         public AlbumService(IAlbumRepository albumRepository, ILogger<AlbumService> logger)
         {
             _albumRepository = albumRepository;      
