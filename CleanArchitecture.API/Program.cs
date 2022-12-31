@@ -20,7 +20,7 @@ try
     logger.Info("init main");
 
     builder.Logging.ClearProviders();
-    builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+    builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
     builder.Host.UseNLog();
 
 
@@ -33,7 +33,8 @@ try
     /************************************************
      * Add connection string to services container - using EF pooling for performance
      ************************************************/
-    builder.Services.AddDbContextPool<MusicContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    builder.Services.AddDbContextPool<MusicContext>(options => options
+        .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
     /************************************************
      * Dependency Injection 
