@@ -16,7 +16,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 ********************************************************************/
 Random _jitterer = new Random();
 string serviceHostURL = builder.Configuration["Services:apiURL"]; // retrieve default URL to API
-int _retryCount = int.Parse(builder.Configuration["Services:retryCount"]); // retrieve default URL to API
+int _retryCount = int.Parse(builder.Configuration["Services:retryCount"]); // retrieve default retry count
 
 builder.Services.AddHttpClient<IAlbumService, AlbumService>(client =>
 {

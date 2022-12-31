@@ -40,6 +40,8 @@ try
      ************************************************/
     builder.Services.AddScoped<IAlbumService, AlbumService>();
     builder.Services.AddScoped<IArtistService, ArtistService>();
+
+    // Infrastructure DI only - API needs to DI into Application services
     builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
     builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 
