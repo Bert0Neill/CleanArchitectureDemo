@@ -7,7 +7,6 @@ namespace CleanArchitecture.Blazor.Services
 {
     public class AlbumService : IAlbumService
     {
-
         private readonly HttpClient _httpClient;
 
         public AlbumService(HttpClient httpClient)
@@ -16,7 +15,7 @@ namespace CleanArchitecture.Blazor.Services
         }
 
         public async Task<IEnumerable<AlbumDTO>> GetAlbums()
-        {        
+        {
             return await _httpClient.GetFromJsonAsync<IEnumerable<AlbumDTO>>("api/Repository/RetrieveLatestAlbumsAsync");
         }
     }

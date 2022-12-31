@@ -32,11 +32,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7) Misc", "7) Misc", "{BC2509CE-91B1-47F3-B66A-4B4A19759BD4}"
 	ProjectSection(SolutionItems) = preProject
 		Clean Architecture Demo.docx = Clean Architecture Demo.docx
+		..\..\Users\User\Downloads\Music Database Schema.sql = ..\..\Users\User\Downloads\Music Database Schema.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6) Performance", "6) Performance", "{96F3BD10-B52D-42A5-898B-2EF7E5E3B239}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeasurePerformances", "MeasurePerformances\MeasurePerformances.csproj", "{BEBF255D-7D89-4032-AE24-B30EBADF5F14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeasurePerformances", "MeasurePerformances\MeasurePerformances.csproj", "{BEBF255D-7D89-4032-AE24-B30EBADF5F14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
